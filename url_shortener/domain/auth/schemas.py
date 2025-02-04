@@ -13,3 +13,16 @@ class UserSchema(OrmBaseModel):
     email: str
     is_active: bool
 
+
+class TokenSchema(OrmBaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
+
+class AccessTokenSchema(OrmBaseModel):
+    email: str
+
+
+class RefreshTokenSchema(OrmBaseModel):
+    refresh_token: str

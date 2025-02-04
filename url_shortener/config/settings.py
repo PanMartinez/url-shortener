@@ -9,6 +9,10 @@ class Settings(BaseSettings):
     db_password: str
     db_host: str
     db_port: int
+    algorithm: str
+    jwt_secret_key: str
+    access_token_expire_minutes: int
+    refresh_token_expire_days: int
 
     model_config = SettingsConfigDict(
         env_file="url_shortener/config/.env", env_file_encoding="utf-8"
