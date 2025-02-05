@@ -9,7 +9,6 @@ from url_shortener.domain.common.models import Base
 def get_application() -> FastAPI:
     application = FastAPI()
     Base.metadata.create_all(bind=engine)
-
     application.add_middleware(
         CORSMiddleware,
         allow_origins=get_settings().allowed_hosts,
@@ -17,7 +16,6 @@ def get_application() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
     return application
 
 
