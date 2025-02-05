@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
+from url_shortener.handlers import http_error_handler
 from url_shortener.config.db import engine, SessionLocal
 from url_shortener.config.settings import get_settings
 from url_shortener.domain.common.models import Base
@@ -9,6 +10,7 @@ from url_shortener.domain.common.models import Base
 def get_application() -> FastAPI:
     application = FastAPI()
     Base.metadata.create_all(bind=engine)
+    application.add_exception_handler(Exception, http_error_handler)
     application.add_middleware(
         CORSMiddleware,
         allow_origins=get_settings().allowed_hosts,
