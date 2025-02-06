@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from main import get_application
+from url_shortener.domain.auth.services import create_access_token
 from url_shortener.config.dependencies import get_db
 from url_shortener.config.settings import get_settings
 from url_shortener.domain.auth.models import User
@@ -80,6 +81,23 @@ def client(override_get_db):
     app = get_application()
     app.dependency_overrides[get_db] = override_get_db
     return TestClient(app)
+
+
+@pytest.fixture()
+def auth_client(test_user, client):
+    token = create_access_token(data={"sub": test_user.email})
+
+    class AuthClient:
+        def __init__(self, test_client, test_token):
+            self.client = test_client
+            self.token = test_token
+
+        def request(self, method, url, **kwargs):
+            headers = kwargs.pop("headers", {})
+            headers["Authorization"] = f"Bearer {self.token}"
+            return self.client.request(method, url, headers=headers, **kwargs)
+
+    return AuthClient(test_client=client, test_token=token)
 
 
 @pytest.fixture()
