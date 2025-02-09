@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     shortened_url_length: int
 
     model_config = SettingsConfigDict(
-        env_file="url_shortener/config/.env", env_file_encoding="utf-8"
+        env_file=".env", env_file_encoding="utf-8"
     )
 
     @property

@@ -37,7 +37,6 @@ def user_register(user_data: UserAuthSchema, db: Session = Depends(get_db)):
     return user
 
 
-@auth_router.post("/access_token")
 def get_access_token(
     user_data: UserAuthSchema,
     db: Session = Depends(get_db),
