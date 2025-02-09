@@ -11,6 +11,7 @@ from url_shortener.config.dependencies import get_db
 from url_shortener.config.settings import get_settings
 from url_shortener.domain.auth.models import User
 from url_shortener.domain.common.models import Base
+from url_shortener.domain.urls.models import Url
 
 
 ADMIN_DATABASE_URL: str = get_settings().database_url
@@ -123,3 +124,29 @@ def test_user(dummy_user) -> User:
         hashed_password="",
     )
     return user
+
+
+@pytest.fixture()
+def dummy_url(test_db: Session):
+    def create_dummy_url(*args, **kwargs):
+        original_url = kwargs.pop("original_url")
+        existing_url: User | None = test_db.query(Url).filter_by(original_url=original_url).first()
+        if existing_url:
+            return existing_url
+        url: Url = Url(original_url=original_url, *args, **kwargs)
+        test_db.add(url)
+        test_db.commit()
+        test_db.refresh(url)
+        return url
+
+    return create_dummy_url
+
+
+@pytest.fixture()
+def test_url(dummy_url, test_user: User) -> Url:
+    url: Url = dummy_url(
+        original_url="https://www.google.com",
+        shortened_url="https://go.url",
+        user=test_user,
+    )
+    return url
