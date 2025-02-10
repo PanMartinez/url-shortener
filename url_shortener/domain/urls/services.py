@@ -19,18 +19,33 @@ def create_url(url_data: UrlCreateSchema, current_user: User, db: Session) -> Ur
     db.refresh(new_url)
     return new_url
 
-def update_url(url_data: UrlCreateSchema, current_user: User, db: Session) -> Url:
+
+def update_url(
+    url_data: UrlCreateSchema, current_user: User, db: Session
+) -> Url | None:
     url = get_url_by_original(original_url=url_data.original_url, db=db)
-    url.original_url = url_data.original_url
-    url.shortened_url = get_shortened_url()
-    url.user = current_user
-    db.commit()
-    db.refresh(url)
-    return url
+    if url:
+        url.original_url = url_data.original_url
+        url.shortened_url = get_shortened_url()
+        url.user = current_user
+        db.commit()
+        db.refresh(url)
+        return url
+    return None
 
 
 def get_shortened_url() -> str:
-    return ''.join(random.choices((string.ascii_letters + string.digits), k=get_settings().shortened_url_length))
+    """
+    TODO
+    This is basic API only version of shortening url.
+    whenever this app will receive frontend application, we need to add domain name to shortened url.
+    """
+    return "".join(
+        random.choices(
+            (string.ascii_letters + string.digits),
+            k=get_settings().shortened_url_length,
+        )
+    )
 
 
 def get_url_by_short(shortened_url: str, db: Session) -> Url | None:
@@ -39,4 +54,3 @@ def get_url_by_short(shortened_url: str, db: Session) -> Url | None:
 
 def get_url_by_original(original_url: str, db: Session) -> Url | None:
     return db.query(Url).filter(Url.original_url == original_url).first()
-

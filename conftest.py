@@ -32,12 +32,14 @@ def _admin_db_cursor():
         cursor.close()
         connection.close()
 
+
 def create_test_database():
     with _admin_db_cursor() as cursor:
         try:
             cursor.execute(f"CREATE DATABASE {TEST_DATABASE_NAME};")
         except psycopg2.errors.DuplicateDatabase:
             pass
+
 
 def drop_test_database():
     with _admin_db_cursor() as cursor:
@@ -74,6 +76,7 @@ def override_get_db(test_db):
             yield test_db
         finally:
             test_db.close()
+
     return _override_get_db
 
 
@@ -130,10 +133,10 @@ def test_user(dummy_user) -> User:
 def dummy_url(test_db: Session):
     def create_dummy_url(*args, **kwargs):
         original_url = kwargs.pop("original_url")
-        existing_url: User | None = test_db.query(Url).filter_by(original_url=original_url).first()
+        existing_url = test_db.query(Url).filter_by(original_url=original_url).first()
         if existing_url:
             return existing_url
-        url: Url = Url(original_url=original_url, *args, **kwargs)
+        url = Url(original_url=original_url, *args, **kwargs)
         test_db.add(url)
         test_db.commit()
         test_db.refresh(url)

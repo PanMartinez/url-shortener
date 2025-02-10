@@ -15,14 +15,15 @@ python = "^3.13"
 fastapi = {extras = ["standard"], version = "^0.115.5"}
 pyjwt = "^2.10.1"
 psycopg2-binary = "^2.9.10"
-sqlalchemy = "2.0.37"
+sqlalchemy = "2.0.38"
 alembic = "^1.14.0"
 pydantic = "2.10.6"
 pydantic_settings = "^2.6.1"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-dotenv = "^1.0.1"
-mypy = "^1.13.0"
+mypy = "^1.15.0"
 types-passlib = "^1.7.7.20240819"
+types-psycopg2  = "^2.9.21.20250121"
 httpx = "^0.28.1"
 
 [tool.poetry.dev-dependencies]
