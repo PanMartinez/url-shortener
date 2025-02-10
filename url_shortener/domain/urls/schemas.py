@@ -23,4 +23,5 @@ class UrlSchema(OrmBaseModel):
     id: UUID
     shortened_url: str
     original_url: str
-
+    user_ip: str
+    user_agent: str

@@ -8,11 +8,19 @@ from url_shortener.domain.urls.models import Url
 from url_shortener.domain.urls.schemas import UrlCreateSchema
 
 
-def create_url(url_data: UrlCreateSchema, current_user: User, db: Session) -> Url:
+def create_url(
+    url_data: UrlCreateSchema,
+    current_user: User,
+    user_ip: str,
+    user_agent: str,
+    db: Session,
+) -> Url:
     new_url = Url(
         original_url=url_data.original_url,
         shortened_url=get_shortened_url(),
         user=current_user,
+        user_ip=user_ip,
+        user_agent=user_agent,
     )
     db.add(new_url)
     db.commit()

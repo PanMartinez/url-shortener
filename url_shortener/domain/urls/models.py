@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from uuid import UUID
-from sqlalchemy import ForeignKey, String, Text, Integer
+from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from url_shortener.domain.common.models import Base
@@ -13,6 +13,9 @@ class Url(Base):
 
     original_url: Mapped[str] = mapped_column(String(256), nullable=False)
     shortened_url: Mapped[str] = mapped_column(String(32), nullable=True)
+
+    user_ip: Mapped[str] = mapped_column(String(15), nullable=False)
+    user_agent: Mapped[str] = mapped_column(Text, nullable=False)
 
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
     user: Mapped[User] = relationship("User", back_populates="urls")

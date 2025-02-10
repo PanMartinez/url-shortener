@@ -9,6 +9,7 @@ Please note!
 
 - We are missing frontend application with domain name so all shortened urls are in "code-only" mode. In Next iterations of the app shortened url will have domain attached to it as well.
 - docker ndb configuration is using different host that local postgres one. There is need to tweak configuration.
+- Urls ownership idea is not 100% crystalized. More validation is required around urls CRUD services
 
 ## Development and testing
 ### Ensure you have following installed in your system

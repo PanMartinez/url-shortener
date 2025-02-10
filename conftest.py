@@ -151,5 +151,7 @@ def test_url(dummy_url, test_user: User) -> Url:
         original_url="https://www.google.com",
         shortened_url="https://go.url",
         user=test_user,
+        user_ip="127.0.0.1",
+        user_agent="Test User Agent",
     )
     return url
