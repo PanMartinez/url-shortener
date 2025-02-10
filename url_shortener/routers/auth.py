@@ -1,5 +1,7 @@
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+
 from sqlalchemy.orm import Session
 
 from url_shortener.handlers import ErrorMessages
@@ -36,12 +38,12 @@ def user_register(user_data: UserAuthSchema, db: Session = Depends(get_db)):
     user = create_user(user_data=user_data, db=db)
     return user
 
-
+@auth_router.post("/access_token")
 def get_access_token(
-    user_data: UserAuthSchema,
+    user_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ) -> TokenSchema:
-    user = get_user_by_email(email=user_data.email, db=db)
+    user = get_user_by_email(email=user_data.username, db=db)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

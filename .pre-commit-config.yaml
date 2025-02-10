@@ -17,3 +17,11 @@ repos:
     rev: 25.1.0
     hooks:
         - id: black
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: bash -c 'cd mypy'
+        language: system
+        types: [python]
