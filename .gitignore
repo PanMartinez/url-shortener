@@ -12,8 +12,7 @@ build/
 *.pot
 *.pyc
 
-**/.env
-.local
+.env
 
 # pytest
 *.pytest_cache/
@@ -25,15 +24,12 @@ docker-compose.override.yml
 .env.docker
 .env.docker-db
 
-# PyCharm
-.idea/
 
 # macOS
 .DS_Store
 .AppleDouble
 .LSOverride
 
-texts
 
 # Logs
 logs

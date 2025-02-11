@@ -25,10 +25,10 @@ mypy = "^1.15.0"
 types-passlib = "^1.7.7.20240819"
 types-psycopg2  = "^2.9.21.20250121"
 httpx = "^0.28.1"
+pytest = "^8.3.3"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^4.0.1"
-pytest = "^8.3.3"
 
 [tool.mypy]
 python_version = "3.13"

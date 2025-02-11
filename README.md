@@ -8,97 +8,67 @@ Please note!
 : This is Alpha version of the project. There are few missing parts that are still to do:
 
 - We are missing frontend application with domain name so all shortened urls are in "code-only" mode. In Next iterations of the app shortened url will have domain attached to it as well.
-- docker ndb configuration is using different host that local postgres one. There is need to tweak configuration.
+- Docker configuration is NOT production ready. Fastapi dev mode is on, with life reload.
 - Urls ownership idea is not 100% crystalized. More validation is required around urls CRUD services
 
-## Development and testing
+## Local development
 ### Ensure you have following installed in your system
+- Docker
+- Docker Compose
 - poetry
 - postgresql
 
+### Create `.env` file
 After forking this app into your system add `.env` file to the root catalogue. You can use `.env-template` file for
-reference:
+reference
 
-To create JWT secret key you can use following script:
-```python
-import os
 
-print(os.urandom(32).hex())
-```
-
-## Configure database
-open psql shell
-```shell
-psql
-```
-
-create database user
-```shell
-CREATE ROLE username WITH LOGIN PASSWORD 'password';
-```
-
-add user privileges for creating test databases
-```shell
-ALTER USER username CREATEDB;
-```
-
-create database
-```shell
-CREATE DATABASE databasename OWNER username ENCODING UTF8;
-```
-
-Then run following commands from root catalogue:
-
-### Install dependencies
+### Create poetry env
+From the Root catalogue run following commands
 
 ```shell
 poetry install
 ```
-
-### Install pre-commit
-
-```shell
-pre-commit install
-```
-
 ### Enter poetry virtualenv
 ```shell
 poetry shell
 ```
 
-### Run pytest
+### Env updates
+After each update to env export it to requirements file, so docker can use them
 ```shell
-pytest
+poetry export --without-hashes --format=requirements.txt > requirements.txt
 ```
 
-### Run fastapi localhost
+### Install pre-commit
 ```shell
-fastapi dev
+pre-commit install
 ```
 
 
 ## Running docker:
-
-### Ensure you have the following installed in your system:
-- Docker
-- Docker Compose
-
 Before running docker commands, ensure that you have docker daemon running
 
-Please note!
-: Before building docker app change your `.env`
-
-```
-DB_HOST=db
-```
 
 Build application
 ```shell
 docker-compose up --build
 ```
+Please Note!
+: Docker application running in the DEV mode. This means that all of local development changes will be reflected in the container
 
 
-### Testing App
+## Running pytest
+With url_shortener container running, enter it with following command:
+```shell
+docker exec -it url_shortener sh
+```
+inside container run following command to run all unittests from the app
+```shell
+pytest
+```
+
+## Testing App
 by default application is running on `http://localhost:8000/docs`
 
 In order to create shortened urls, first create user using `api/auth/register` endpoint
