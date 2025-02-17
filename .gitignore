@@ -19,7 +19,6 @@ build/
 
 # Docker
 .dockerignore
-docker-compose.yml
 docker-compose.override.yml
 .env.docker
 .env.docker-db
