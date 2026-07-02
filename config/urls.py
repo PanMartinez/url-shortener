@@ -1,3 +1,5 @@
-from django.urls import URLPattern, URLResolver
+from django.urls import URLPattern, URLResolver, include, path
 
-urlpatterns: list[URLPattern | URLResolver] = []
+urlpatterns: list[URLPattern | URLResolver] = [
+    path("", include("shortener.urls")),
+]

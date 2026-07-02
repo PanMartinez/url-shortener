@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from typing import Any
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,6 +94,17 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Django Rest Framework settings
+"""
+This is project without any auth layer, therefore I needed to point out 
+DRF to None instead of AnonymousUser from django.contrib.auth.
+I decided not to install auth, to keep this project simple.
+"""
+REST_FRAMEWORK: dict[str, Any] = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "UNAUTHENTICATED_USER": None,
+}
 
 # Codegen settings
 DEFAULT_CODE_LENGTH: int = 7
