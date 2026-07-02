@@ -12,6 +12,7 @@ A minimal DRF API for shortening URLs — create a short code from a long URL, a
 - ruff for linting and formatting
 - pytest / pytest-django for testing
 - pre-commit for local checks
+- Docker for containerized runs
 
 ## Setup
 
@@ -27,6 +28,26 @@ uv run python manage.py runserver
 ```
 
 The API is served at `http://127.0.0.1:8000/`.
+
+## Running with Docker
+
+Build the image:
+
+```bash
+docker build -t url-shortener .
+```
+
+Run it (migrations are applied automatically on startup):
+
+```bash
+docker run -p 8000:8000 url-shortener
+```
+
+The API is served at `http://127.0.0.1:8000/`
+
+```bash
+docker run -p 8000:8000 -v "$(pwd)/data:/app/data" url-shortener
+```
 
 ## Endpoints
 
@@ -85,8 +106,10 @@ uv run ruff format --check .
 Please note that `pre-commit` is not installed by default. Once installed it will run automatically on every commit.
 
 ## Design decisions & assumptions
+- No `.env` file for secrets: To keep this simple.
 - No `django.contrib.auth`: To keep app simple, no users are involved, which is reflected in the settings.
 - Extend on GET endpoint with params: Just to demonstrate how to use them in DRF. 
 - Duplicate long URLs are idempotent: To ensure expanding a short code always returns the same long URL.
-- Short-code generation: `generate_code()` builds a code by choosing `settings.DEFAULT_CODE_LENGTH`
+- Short-code generation: `generate_code()` builds a code by choosing `settings.DEFAULT_CODE_LENGTH`.
 - URL validation: `original_url` is validated by DRF's `URLField`.
+- SQLite lives under `data/db.sqlite3`: A dedicated directory (kept in git via `data/.gitkeep`, db file itself is gitignored) makes the Docker persistence mount a plain directory bind-mount, avoiding the file-vs-directory mount quirk of bind-mounting a single file that doesn't exist yet.
