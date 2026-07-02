@@ -9,11 +9,6 @@ from shortener.models import ShortURL
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture
-def api_client() -> APIClient:
-    return APIClient()
-
-
 class TestShortUrlView:
     url = reverse("shortener:create")
     test_url = "https://example.com/test-url"

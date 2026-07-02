@@ -1,9 +1,5 @@
-import pytest
-
 from shortener.models import ShortURL
 from shortener.serializers import ShortURLSerializer
-
-pytestmark = pytest.mark.django_db
 
 
 class TestShortURLSerializer:
@@ -26,7 +22,7 @@ class TestShortURLSerializer:
         assert not serializer.is_valid()
         assert "original_url" in serializer.errors
 
-    def test_serializer_ignores_client_supplied_code(self) -> None:
+    def test_serializer_ignores_client_supplied_code(self, db: None) -> None:
         serializer = ShortURLSerializer(data={"original_url": self.test_url, "code": "HACKED1"})
         serializer.is_valid(raise_exception=True)
 
@@ -34,7 +30,7 @@ class TestShortURLSerializer:
 
         assert instance.code != "HACKED1"
 
-    def test_serializer_create_returns_new_object_for_new_url(self) -> None:
+    def test_serializer_create_returns_new_object_for_new_url(self, db: None) -> None:
         serializer = ShortURLSerializer(data={"original_url": self.test_url})
         serializer.is_valid(raise_exception=True)
 
@@ -42,7 +38,7 @@ class TestShortURLSerializer:
 
         assert ShortURL.objects.filter(pk=instance.pk).exists()
 
-    def test_serializer_create_is_idempotent_for_duplicate_url(self) -> None:
+    def test_serializer_create_is_idempotent_for_duplicate_url(self, db: None) -> None:
         first_serializer = ShortURLSerializer(data={"original_url": self.test_url})
         first_serializer.is_valid(raise_exception=True)
         first_instance = first_serializer.save()
