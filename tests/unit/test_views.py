@@ -18,8 +18,8 @@ class TestShortUrlView:
         response = api_client.post(self.url, payload, format="json")
 
         assert response.status_code == status.HTTP_201_CREATED
-        assert response.data["original_url"] == self.test_url
-        assert ShortURL.objects.filter(code=response.data["code"]).exists()
+        assert response.data.keys() == {"code"}
+        assert ShortURL.objects.filter(code=response.data["code"], original_url=self.test_url).exists()
 
     def test_create_view_returns_200_for_duplicate_url(self, api_client: APIClient) -> None:
         payload = {"original_url": self.test_url}
@@ -55,7 +55,7 @@ class TestShortUrlView:
         response = api_client.get(reverse("shortener:expand", kwargs={"code": existing_url.code}))
 
         assert response.status_code == status.HTTP_200_OK
-        assert response.data["code"] == existing_url.code
+        assert response.data.keys() == {"original_url"}
         assert response.data["original_url"] == existing_url.original_url
 
     def test_expand_view_returns_404_for_unknown_code(self, api_client: APIClient) -> None:

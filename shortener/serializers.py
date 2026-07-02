@@ -20,3 +20,17 @@ class ShortURLSerializer(serializers.ModelSerializer[ShortURL]):
             defaults={"code": generate_code()},
         )
         return obj
+
+
+class ShortURLCodeSerializer(serializers.ModelSerializer[ShortURL]):
+    class Meta:
+        model = ShortURL
+        fields = ["code"]
+        read_only_fields = ["code"]
+
+
+class ShortURLExpandSerializer(serializers.ModelSerializer[ShortURL]):
+    class Meta:
+        model = ShortURL
+        fields = ["original_url"]
+        read_only_fields = ["original_url"]

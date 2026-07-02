@@ -1,5 +1,5 @@
 from shortener.models import ShortURL
-from shortener.serializers import ShortURLSerializer
+from shortener.serializers import ShortURLCodeSerializer, ShortURLExpandSerializer, ShortURLSerializer
 
 
 class TestShortURLSerializer:
@@ -49,3 +49,17 @@ class TestShortURLSerializer:
 
         assert second_instance.pk == first_instance.pk
         assert ShortURL.objects.filter(original_url=self.test_url).count() == 1
+
+
+class TestShortURLCodeSerializer:
+    def test_serializer_exposes_only_code(self) -> None:
+        instance = ShortURL(original_url="https://example.com/test-url", code="ABC1234")
+
+        assert ShortURLCodeSerializer(instance).data.keys() == {"code"}
+
+
+class TestShortURLExpandSerializer:
+    def test_serializer_exposes_only_original_url(self) -> None:
+        instance = ShortURL(original_url="https://example.com/test-url", code="ABC1234")
+
+        assert ShortURLExpandSerializer(instance).data.keys() == {"original_url"}

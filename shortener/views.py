@@ -5,7 +5,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from shortener.models import ShortURL
-from shortener.serializers import ShortURLSerializer
+from shortener.serializers import ShortURLCodeSerializer, ShortURLExpandSerializer, ShortURLSerializer
 
 
 class ShortURLCreateView(generics.CreateAPIView[ShortURL]):
@@ -19,11 +19,11 @@ class ShortURLCreateView(generics.CreateAPIView[ShortURL]):
         already_existed = ShortURL.objects.filter(original_url=original_url).exists()
         instance = serializer.save()
         response_status = status.HTTP_200_OK if already_existed else status.HTTP_201_CREATED
-        return Response(self.get_serializer(instance).data, status=response_status)
+        return Response(ShortURLCodeSerializer(instance).data, status=response_status)
 
 
 class ShortURLExpandView(generics.RetrieveAPIView[ShortURL]):
     queryset = ShortURL.objects.all()
-    serializer_class = ShortURLSerializer
+    serializer_class = ShortURLExpandSerializer
     lookup_field = "code"
     lookup_url_kwarg = "code"
